@@ -1,58 +1,97 @@
+
 <?php
 $result;
-$isCompleted = false;
-$appName ="My App";
-$taskTitle = "Learn PHP basics - operators, variables, functions and string";
+$tasks = [
+    [
+        'id' => 1,
+        'title' => 'Learn php basics: arrays, variables and functions',
+        'priority' => 'High',
+        'is_completed' => false,
+        'time' => '2 hours',
+        'repository' => 'Programuvaniya',
+        'date' => '21 september',
+    ],
+    [
+        'id' => 2,
+        'title' => 'Practice PHP functions and conditions',
+        'priority' => 'Medium',
+        'is_completed' => true,
+        'time' => '1 hour',
+        'repository' => 'Programuvaniya',
+        'date' => '22 september',
+    ],
+    [
+        'id' => 3,
+        'title' => 'Create a database for the project',
+        'priority' => 'High',
+        'is_completed' => false,
+        'time' => '3 hours',
+        'repository' => 'Programuvaniya',
+        'date' => '23 september',
+    ],
+    [
+        'id' => 4,
+        'title' => 'Review HTML and CSS basics',
+        'priority' => 'Low',
+        'is_completed' => true,
+        'time' => '1 hour',
+        'repository' => 'Programuvaniya',
+        'date' => '24 september',
+    ],
+];
 $taskTimeEstimate = "1 hour";
-function formatTitle($text, $maxLenght = 20) {
-    if ((strlen($text)) >= $maxLenght)
-        return substr($text, 0, $maxLenght) . "...";
+
+function formatTitle($text, $maxLength = 20) {
+    if (strlen($text) >= $maxLength)
+        return substr($text, 0, $maxLength) . "...";
     else
         return $text;
 }
 
 function getCurrentGreeting($Time){
-    if ((date($Time)) >= "06:00" && (date($Time)) <= "11:59")
+    if (date($Time) >= "06:00" && date($Time) <= "11:59")
         echo "Доброго ранку";
-    elseif ((date($Time)) >= "12:00" && (date($Time)) <= "17:59")
+    elseif (date($Time) >= "12:00" && date($Time) <= "17:59")
         echo "Добрий день";
-     elseif ((date($Time)) >= "18:00" && (date($Time)) <= "23:59")
+    elseif (date($Time) >= "18:00" && date($Time) <= "23:59")
         echo "Добрий вечір";
 }
-
-$result = ($isCompleted == true) ? "Виконано!" : "В процесі";
 ?>
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "UTF-8">
-    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <style>
-        .task-done {
-            color: green;
-            text-decoration: line-through;
-        }
-
-        .task-pending {
-            color: gray;
-        }
-    </style>
 </head>
 <body>
     <header>
-        <h1> <?= getCurrentGreeting(date('H:i:s')) ?> </h1>
+        <h1><?= getCurrentGreeting('H:i') ?></h1>
         <ul>
-            <li class="<?= $isCompleted == true ? 'task-done' : 'task-pending' ?>">
-                <?= $result ?> <?= formatTitle($taskTitle) ?>
+        <?php foreach ($tasks as $task): ?>
+            <li class="<?= $task['is_completed'] == false ? 'task-pending' : 'task-done' ?>">
+                <?php echo formatTitle($task['title']); ?>
+                <?php echo $task['date']; ?>
+                <?php echo $task['priority']; ?>
+                <?php echo $task['time']; ?>
+                <style>
+                <?php if ($task['is_completed'] == false): ?>
+                    .task-pending {
+                        color: gray;
+                        text-decoration: line-through;
+                    }
+                <?php else: ?>
+                    .task-done {
+                        color: green;
+                        text-decoration: line-through;
+                    }
+                <?php endif; ?>
+                </style>
             </li>
-            <li><?=$taskTimeEstimate?></li>
+        <?php endforeach; ?>
         </ul>
     </header>
     <main>
-
-
-    </main>    
+    </main>
 </body>
 </html>
