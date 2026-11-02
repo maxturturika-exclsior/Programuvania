@@ -1,6 +1,4 @@
-
 <?php
-$result;
 $tasks = [
     [
         'id' => 1,
@@ -42,19 +40,21 @@ $tasks = [
 $taskTimeEstimate = "1 hour";
 
 function formatTitle($text, $maxLength = 20) {
-    if (strlen($text) >= $maxLength)
-        return substr($text, 0, $maxLength) . "...";
+    if (mb_strlen($text) >= $maxLength)
+        return mb_substr($text, 0, $maxLength) . "...";
     else
         return $text;
 }
 
-function getCurrentGreeting($Time){
-    if (date($Time) >= "06:00" && date($Time) <= "11:59")
-        echo "Доброго ранку";
-    elseif (date($Time) >= "12:00" && date($Time) <= "17:59")
-        echo "Добрий день";
-    elseif (date($Time) >= "18:00" && date($Time) <= "23:59")
-        echo "Добрий вечір";
+function getCurrentGreeting() {
+    $currentTime = date('H:i');
+    if ($currentTime >= "06:00" && $currentTime <= "11:59") {
+        return "Доброго ранку";
+    } elseif ($currentTime >= "12:00" && $currentTime <= "17:59") {
+        return "Добрий день";
+    } else {
+        return "Добрий вечір";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -62,31 +62,42 @@ function getCurrentGreeting($Time){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Список завдань</title>
+    <style>
+        .task-pending {
+            color: gray;
+        }
+        .task-done {
+            color: green;
+            text-decoration: line-through;
+        }
+        .btn-add {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .btn-add:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1><?= getCurrentGreeting('H:i') ?></h1>
+        <h1><?= getCurrentGreeting() ?></h1>
+        
+        <a href="create.php" class="btn-add">Додати нове завдання</a>
+
         <ul>
         <?php foreach ($tasks as $task): ?>
-            <li class="<?= $task['is_completed'] == false ? 'task-pending' : 'task-done' ?>">
-                <?php echo formatTitle($task['title']); ?>
-                <?php echo $task['date']; ?>
-                <?php echo $task['priority']; ?>
-                <?php echo $task['time']; ?>
-                <style>
-                <?php if ($task['is_completed'] == false): ?>
-                    .task-pending {
-                        color: gray;
-                        text-decoration: line-through;
-                    }
-                <?php else: ?>
-                    .task-done {
-                        color: green;
-                        text-decoration: line-through;
-                    }
-                <?php endif; ?>
-                </style>
+            <li class="<?= !$task['is_completed'] ? 'task-pending' : 'task-done' ?>">
+                <?= htmlspecialchars(formatTitle($task['title'])) ?> | 
+                <?= htmlspecialchars($task['date']) ?> | 
+                Пріоритет: <?= htmlspecialchars($task['priority']) ?> | 
+                Час: <?= htmlspecialchars($task['time']) ?>
             </li>
         <?php endforeach; ?>
         </ul>
