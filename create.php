@@ -13,8 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Створити завдання</title>
 </head>
 <body>
-    
-    <!-- ВИПРАВЛЕННЯ ТУТ: додали action та method -->
+
     <form action="create.php" method="POST">
         <label for="title">Назва завдання:</label>
         <input type="text" name="title" id="title">
